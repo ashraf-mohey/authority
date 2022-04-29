@@ -1,0 +1,14 @@
+syntax = "proto3";
+package ashrafmohey.authority.patient;
+
+import "gogoproto/gogo.proto";
+import "patient/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/ashraf-mohey/authority/x/patient/types";
+
+// GenesisState defines the patient module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package ashrafmohey.authority.organization;
+
+import "gogoproto/gogo.proto";
+import "organization/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
+
+// GenesisState defines the organization module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  string port_id = 2;
+  // this line is used by starport scaffolding # genesis/proto/state
+}

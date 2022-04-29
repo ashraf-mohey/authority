@@ -1,0 +1,12 @@
+syntax = "proto3";
+package ashrafmohey.authority.organization;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

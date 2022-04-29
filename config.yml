@@ -1,16 +1,41 @@
 accounts:
-  - name: alice
-    coins: ["20000token", "200000000stake"]
-  - name: bob
-    coins: ["10000token", "100000000stake"]
+  - name: eg-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: uk-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: sa-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: au-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: ca-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: fr-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: ge-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: ru-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: bf-authority
+    coins: ["20000aut", "200000000stake"]
+  - name: br-authority
+    coins: ["20000aut", "200000000stake"]
+    
 validator:
-  name: alice
-  staked: "100000000stake"
+  name: "eg-authority"
+  staked: "10000000stake"
+  
+faucet:
+  name: eg-authority
+  coins: ["5aut", "100000stake"]
+  
 client:
   openapi:
     path: "docs/static/openapi.yml"
   vuex:
     path: "vue/src/store"
-faucet:
-  name: bob
-  coins: ["5token", "100000stake"]
+
+genesis:
+  chain_id: "authority"
+  
+init:
+  home: "$HOME/.authority"
