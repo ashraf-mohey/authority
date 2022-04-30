@@ -7,7 +7,18 @@ option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc SendIbcOrganization(MsgSendIbcOrganization) returns (MsgSendIbcOrganizationResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
 }
 
+message MsgSendIbcOrganization {
+  string creator = 1;
+  string port = 2;
+  string channelID = 3;
+  uint64 timeoutTimestamp = 4;
+  string mnemonic = 5;
+}
+
+message MsgSendIbcOrganizationResponse {
+}
 // this line is used by starport scaffolding # proto/tx/message

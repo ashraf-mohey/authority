@@ -9,10 +9,21 @@ message OrganizationPacketData {
     oneof packet {
         NoData noData = 1;
         // this line is used by starport scaffolding # ibc/packet/proto/field
+				IbcOrganizationPacketData ibcOrganizationPacket = 2; // this line is used by starport scaffolding # ibc/packet/proto/field/number
     }
 }
 
 message NoData {
 }
 
+// IbcOrganizationPacketData defines a struct for the packet payload
+message IbcOrganizationPacketData {
+  string mnemonic = 1;
+  string creator = 2; // < ---
+}
+
+// IbcOrganizationPacketAck defines a struct for the packet acknowledgment
+message IbcOrganizationPacketAck {
+	  string address = 1;
+}
 // this line is used by starport scaffolding # ibc/packet/proto/message

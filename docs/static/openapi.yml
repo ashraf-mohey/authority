@@ -28343,6 +28343,8 @@ paths:
       tags:
         - Query
 definitions:
+  ashrafmohey.authority.organization.MsgSendIbcOrganizationResponse:
+    type: object
   ashrafmohey.authority.organization.Params:
     type: object
     description: Params defines the parameters for the module.

@@ -2,10 +2,12 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { OrganizationPacketData } from "./module/types/organization/packet"
 import { NoData } from "./module/types/organization/packet"
+import { IbcOrganizationPacketData } from "./module/types/organization/packet"
+import { IbcOrganizationPacketAck } from "./module/types/organization/packet"
 import { Params } from "./module/types/organization/params"
 
 
-export { OrganizationPacketData, NoData, Params };
+export { OrganizationPacketData, NoData, IbcOrganizationPacketData, IbcOrganizationPacketAck, Params };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -48,6 +50,8 @@ const getDefaultState = () => {
 				_Structure: {
 						OrganizationPacketData: getStructure(OrganizationPacketData.fromPartial({})),
 						NoData: getStructure(NoData.fromPartial({})),
+						IbcOrganizationPacketData: getStructure(IbcOrganizationPacketData.fromPartial({})),
+						IbcOrganizationPacketAck: getStructure(IbcOrganizationPacketAck.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						
 		},
@@ -139,7 +143,35 @@ export default {
 		},
 		
 		
+		async sendMsgSendIbcOrganization({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgSendIbcOrganization(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSendIbcOrganization:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgSendIbcOrganization:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		
+		async MsgSendIbcOrganization({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgSendIbcOrganization(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgSendIbcOrganization:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgSendIbcOrganization:Create Could not create message: ' + e.message)
+				}
+			}
+		},
 		
 	}
 }
