@@ -13,13 +13,15 @@ export interface NoData {}
 
 /** IbcOrganizationPacketData defines a struct for the packet payload */
 export interface IbcOrganizationPacketData {
-  mnemonic: string;
-  /** < --- */
   creator: string;
+  name: string;
+  organizationType: string;
+  country: string;
 }
 
 /** IbcOrganizationPacketAck defines a struct for the packet acknowledgment */
 export interface IbcOrganizationPacketAck {
+  accountName: string;
   address: string;
 }
 
@@ -158,18 +160,29 @@ export const NoData = {
   },
 };
 
-const baseIbcOrganizationPacketData: object = { mnemonic: "", creator: "" };
+const baseIbcOrganizationPacketData: object = {
+  creator: "",
+  name: "",
+  organizationType: "",
+  country: "",
+};
 
 export const IbcOrganizationPacketData = {
   encode(
     message: IbcOrganizationPacketData,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.mnemonic !== "") {
-      writer.uint32(10).string(message.mnemonic);
-    }
     if (message.creator !== "") {
-      writer.uint32(18).string(message.creator);
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.organizationType !== "") {
+      writer.uint32(26).string(message.organizationType);
+    }
+    if (message.country !== "") {
+      writer.uint32(34).string(message.country);
     }
     return writer;
   },
@@ -187,10 +200,16 @@ export const IbcOrganizationPacketData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.mnemonic = reader.string();
+          message.creator = reader.string();
           break;
         case 2:
-          message.creator = reader.string();
+          message.name = reader.string();
+          break;
+        case 3:
+          message.organizationType = reader.string();
+          break;
+        case 4:
+          message.country = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -204,23 +223,39 @@ export const IbcOrganizationPacketData = {
     const message = {
       ...baseIbcOrganizationPacketData,
     } as IbcOrganizationPacketData;
-    if (object.mnemonic !== undefined && object.mnemonic !== null) {
-      message.mnemonic = String(object.mnemonic);
-    } else {
-      message.mnemonic = "";
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
       message.creator = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (
+      object.organizationType !== undefined &&
+      object.organizationType !== null
+    ) {
+      message.organizationType = String(object.organizationType);
+    } else {
+      message.organizationType = "";
+    }
+    if (object.country !== undefined && object.country !== null) {
+      message.country = String(object.country);
+    } else {
+      message.country = "";
     }
     return message;
   },
 
   toJSON(message: IbcOrganizationPacketData): unknown {
     const obj: any = {};
-    message.mnemonic !== undefined && (obj.mnemonic = message.mnemonic);
     message.creator !== undefined && (obj.creator = message.creator);
+    message.name !== undefined && (obj.name = message.name);
+    message.organizationType !== undefined &&
+      (obj.organizationType = message.organizationType);
+    message.country !== undefined && (obj.country = message.country);
     return obj;
   },
 
@@ -230,29 +265,45 @@ export const IbcOrganizationPacketData = {
     const message = {
       ...baseIbcOrganizationPacketData,
     } as IbcOrganizationPacketData;
-    if (object.mnemonic !== undefined && object.mnemonic !== null) {
-      message.mnemonic = object.mnemonic;
-    } else {
-      message.mnemonic = "";
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
       message.creator = "";
     }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (
+      object.organizationType !== undefined &&
+      object.organizationType !== null
+    ) {
+      message.organizationType = object.organizationType;
+    } else {
+      message.organizationType = "";
+    }
+    if (object.country !== undefined && object.country !== null) {
+      message.country = object.country;
+    } else {
+      message.country = "";
+    }
     return message;
   },
 };
 
-const baseIbcOrganizationPacketAck: object = { address: "" };
+const baseIbcOrganizationPacketAck: object = { accountName: "", address: "" };
 
 export const IbcOrganizationPacketAck = {
   encode(
     message: IbcOrganizationPacketAck,
     writer: Writer = Writer.create()
   ): Writer {
+    if (message.accountName !== "") {
+      writer.uint32(10).string(message.accountName);
+    }
     if (message.address !== "") {
-      writer.uint32(10).string(message.address);
+      writer.uint32(18).string(message.address);
     }
     return writer;
   },
@@ -270,6 +321,9 @@ export const IbcOrganizationPacketAck = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.accountName = reader.string();
+          break;
+        case 2:
           message.address = reader.string();
           break;
         default:
@@ -284,6 +338,11 @@ export const IbcOrganizationPacketAck = {
     const message = {
       ...baseIbcOrganizationPacketAck,
     } as IbcOrganizationPacketAck;
+    if (object.accountName !== undefined && object.accountName !== null) {
+      message.accountName = String(object.accountName);
+    } else {
+      message.accountName = "";
+    }
     if (object.address !== undefined && object.address !== null) {
       message.address = String(object.address);
     } else {
@@ -294,6 +353,8 @@ export const IbcOrganizationPacketAck = {
 
   toJSON(message: IbcOrganizationPacketAck): unknown {
     const obj: any = {};
+    message.accountName !== undefined &&
+      (obj.accountName = message.accountName);
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
@@ -304,6 +365,11 @@ export const IbcOrganizationPacketAck = {
     const message = {
       ...baseIbcOrganizationPacketAck,
     } as IbcOrganizationPacketAck;
+    if (object.accountName !== undefined && object.accountName !== null) {
+      message.accountName = object.accountName;
+    } else {
+      message.accountName = "";
+    }
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
     } else {

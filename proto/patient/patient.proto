@@ -1,0 +1,25 @@
+syntax = "proto3";
+package ashrafmohey.authority.patient;
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "github.com/ashraf-mohey/authority/x/patient/types";
+
+message Patient {
+  string creator = 1;
+  uint64 id = 2;
+  string name = 3;
+  string birthDate = 4;
+  string gender = 5;
+  string maritalStatus = 6;
+  string phone = 7;
+  string email = 8;
+  string nationality = 9;
+  string address = 10;
+  string emergencyContact = 11;
+  string publicKey = 12;
+}
+
+
+
+

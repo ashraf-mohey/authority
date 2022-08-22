@@ -145,8 +145,10 @@ var xxx_messageInfo_NoData proto.InternalMessageInfo
 
 // IbcOrganizationPacketData defines a struct for the packet payload
 type IbcOrganizationPacketData struct {
-	Mnemonic string `protobuf:"bytes,1,opt,name=mnemonic,proto3" json:"mnemonic,omitempty"`
-	Creator  string `protobuf:"bytes,2,opt,name=creator,proto3" json:"creator,omitempty"`
+	Creator          string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Name             string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	OrganizationType string `protobuf:"bytes,3,opt,name=organizationType,proto3" json:"organizationType,omitempty"`
+	Country          string `protobuf:"bytes,4,opt,name=country,proto3" json:"country,omitempty"`
 }
 
 func (m *IbcOrganizationPacketData) Reset()         { *m = IbcOrganizationPacketData{} }
@@ -182,13 +184,6 @@ func (m *IbcOrganizationPacketData) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_IbcOrganizationPacketData proto.InternalMessageInfo
 
-func (m *IbcOrganizationPacketData) GetMnemonic() string {
-	if m != nil {
-		return m.Mnemonic
-	}
-	return ""
-}
-
 func (m *IbcOrganizationPacketData) GetCreator() string {
 	if m != nil {
 		return m.Creator
@@ -196,9 +191,31 @@ func (m *IbcOrganizationPacketData) GetCreator() string {
 	return ""
 }
 
+func (m *IbcOrganizationPacketData) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *IbcOrganizationPacketData) GetOrganizationType() string {
+	if m != nil {
+		return m.OrganizationType
+	}
+	return ""
+}
+
+func (m *IbcOrganizationPacketData) GetCountry() string {
+	if m != nil {
+		return m.Country
+	}
+	return ""
+}
+
 // IbcOrganizationPacketAck defines a struct for the packet acknowledgment
 type IbcOrganizationPacketAck struct {
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	AccountName string `protobuf:"bytes,1,opt,name=accountName,proto3" json:"accountName,omitempty"`
+	Address     string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
 }
 
 func (m *IbcOrganizationPacketAck) Reset()         { *m = IbcOrganizationPacketAck{} }
@@ -234,6 +251,13 @@ func (m *IbcOrganizationPacketAck) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_IbcOrganizationPacketAck proto.InternalMessageInfo
 
+func (m *IbcOrganizationPacketAck) GetAccountName() string {
+	if m != nil {
+		return m.AccountName
+	}
+	return ""
+}
+
 func (m *IbcOrganizationPacketAck) GetAddress() string {
 	if m != nil {
 		return m.Address
@@ -251,25 +275,28 @@ func init() {
 func init() { proto.RegisterFile("organization/packet.proto", fileDescriptor_8898018af4a5e866) }
 
 var fileDescriptor_8898018af4a5e866 = []byte{
-	// 287 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0xcc, 0x2f, 0x4a, 0x4f,
-	0xcc, 0xcb, 0xac, 0x4a, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2f, 0x48, 0x4c, 0xce, 0x4e, 0x2d, 0xd1,
-	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x52, 0x4a, 0x2c, 0xce, 0x28, 0x4a, 0x4c, 0xcb, 0xcd, 0xcf,
-	0x48, 0xad, 0xd4, 0x4b, 0x2c, 0x2d, 0xc9, 0xc8, 0x2f, 0xca, 0x2c, 0xa9, 0xd4, 0x43, 0xd6, 0xa0,
-	0x74, 0x9f, 0x91, 0x4b, 0xcc, 0x1f, 0x49, 0x20, 0x00, 0x6c, 0x80, 0x4b, 0x62, 0x49, 0xa2, 0x90,
-	0x0b, 0x17, 0x5b, 0x5e, 0x3e, 0x88, 0x25, 0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x6d, 0xa4, 0xa5, 0x47,
-	0xd8, 0x3c, 0x3d, 0x3f, 0xb0, 0x0e, 0x0f, 0x86, 0x20, 0xa8, 0x5e, 0xa1, 0x52, 0x2e, 0xd1, 0xcc,
-	0xa4, 0x64, 0x4c, 0x2b, 0x24, 0x98, 0xc0, 0x86, 0xda, 0x12, 0x63, 0xa8, 0x27, 0x36, 0x03, 0xa0,
-	0xf6, 0x60, 0x37, 0xdd, 0x89, 0x83, 0x8b, 0x0d, 0x12, 0x16, 0x4a, 0x1c, 0x5c, 0x6c, 0x10, 0x47,
-	0x29, 0x05, 0x72, 0x49, 0xe2, 0x34, 0x49, 0x48, 0x8a, 0x8b, 0x23, 0x37, 0x2f, 0x35, 0x37, 0x3f,
-	0x2f, 0x33, 0x19, 0xec, 0x5f, 0xce, 0x20, 0x38, 0x5f, 0x48, 0x82, 0x8b, 0x3d, 0xb9, 0x28, 0x35,
-	0xb1, 0x24, 0xbf, 0x08, 0xec, 0x6a, 0xce, 0x20, 0x18, 0x57, 0xc9, 0x84, 0x4b, 0x02, 0xab, 0x91,
-	0x8e, 0xc9, 0xd9, 0x20, 0x5d, 0x89, 0x29, 0x29, 0x45, 0xa9, 0xc5, 0xc5, 0x50, 0x03, 0x61, 0x5c,
-	0xa7, 0x80, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71, 0xc2,
-	0x63, 0x39, 0x86, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0x32, 0x4b, 0xcf, 0x2c,
-	0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0x87, 0x04, 0x8c, 0x2e, 0x38, 0x64, 0xf4, 0xe1,
-	0x21, 0xa3, 0x5f, 0xa1, 0x8f, 0x12, 0xe3, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0xe0, 0x18,
-	0x37, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xe0, 0xb9, 0x15, 0xaf, 0x0e, 0x02, 0x00, 0x00,
+	// 326 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0xc1, 0x4a, 0xc3, 0x40,
+	0x10, 0x86, 0xb3, 0x5a, 0x62, 0x3b, 0xbd, 0xc8, 0x82, 0x92, 0x5e, 0x96, 0x92, 0x93, 0x14, 0xdc,
+	0x80, 0x82, 0x37, 0x0f, 0x96, 0x1e, 0xf4, 0x52, 0x4b, 0x11, 0x0f, 0xde, 0xa6, 0xdb, 0xb5, 0x09,
+	0xa5, 0xd9, 0xb0, 0xd9, 0x80, 0xf1, 0x25, 0xf4, 0xb1, 0x3c, 0xf6, 0xe8, 0x4d, 0x69, 0x5f, 0x44,
+	0xba, 0x49, 0x25, 0xd2, 0x88, 0xde, 0x66, 0x26, 0x99, 0xef, 0xff, 0xf7, 0x67, 0xa0, 0xa3, 0xf4,
+	0x0c, 0xe3, 0xe8, 0x19, 0x4d, 0xa4, 0xe2, 0x20, 0x41, 0x31, 0x97, 0x86, 0x27, 0x5a, 0x19, 0x45,
+	0x7d, 0x4c, 0x43, 0x8d, 0x8f, 0x0b, 0x15, 0xca, 0x9c, 0x63, 0x66, 0x42, 0xa5, 0x23, 0x93, 0xf3,
+	0xea, 0x82, 0xff, 0x41, 0xe0, 0xf8, 0xb6, 0x32, 0x18, 0x59, 0xc0, 0x00, 0x0d, 0xd2, 0x01, 0xb8,
+	0xb1, 0xda, 0x54, 0x1e, 0xe9, 0x92, 0x93, 0xf6, 0x59, 0x8f, 0xff, 0xcd, 0xe3, 0x43, 0xbb, 0x71,
+	0xed, 0x8c, 0xcb, 0x5d, 0x9a, 0xc1, 0x51, 0x34, 0x11, 0xbb, 0x12, 0xde, 0x9e, 0x85, 0x5e, 0xfe,
+	0x07, 0x7a, 0x53, 0x07, 0x28, 0x75, 0xea, 0xe9, 0xfd, 0x26, 0xb8, 0x45, 0x16, 0x7e, 0x13, 0xdc,
+	0xc2, 0x94, 0xff, 0x42, 0xa0, 0xf3, 0x2b, 0x8a, 0x7a, 0x70, 0x20, 0xb4, 0x44, 0xa3, 0xb4, 0x7d,
+	0x6f, 0x6b, 0xbc, 0x6d, 0x29, 0x85, 0x46, 0x8c, 0x0b, 0x69, 0x1d, 0xb7, 0xc6, 0xb6, 0xa6, 0x3d,
+	0x38, 0xac, 0x5a, 0xbc, 0xcb, 0x13, 0xe9, 0xed, 0xdb, 0xef, 0x3b, 0x73, 0x4b, 0x56, 0x59, 0x6c,
+	0x74, 0xee, 0x35, 0x4a, 0x72, 0xd1, 0xfa, 0xf7, 0xe0, 0xd5, 0x1a, 0xba, 0x12, 0x73, 0xda, 0x85,
+	0x36, 0x0a, 0xfb, 0xe3, 0x70, 0x23, 0x5e, 0x78, 0xaa, 0x8e, 0x36, 0x5c, 0x9c, 0x4e, 0xb5, 0x4c,
+	0xd3, 0xd2, 0xda, 0xb6, 0xed, 0x8f, 0xde, 0x56, 0x8c, 0x2c, 0x57, 0x8c, 0x7c, 0xae, 0x18, 0x79,
+	0x5d, 0x33, 0x67, 0xb9, 0x66, 0xce, 0xfb, 0x9a, 0x39, 0x0f, 0x17, 0xb3, 0xc8, 0x84, 0xd9, 0x84,
+	0x0b, 0xb5, 0x08, 0x8a, 0xe4, 0x4f, 0x6d, 0xf4, 0xc1, 0x77, 0xf4, 0xc1, 0x53, 0xf0, 0xe3, 0xa4,
+	0x4c, 0x9e, 0xc8, 0x74, 0xe2, 0xda, 0x93, 0x3a, 0xff, 0x0a, 0x00, 0x00, 0xff, 0xff, 0xa1, 0xf9,
+	0x1f, 0xd7, 0x6f, 0x02, 0x00, 0x00,
 }
 
 func (m *OrganizationPacketData) Marshal() (dAtA []byte, err error) {
@@ -389,17 +416,31 @@ func (m *IbcOrganizationPacketData) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	_ = i
 	var l int
 	_ = l
+	if len(m.Country) > 0 {
+		i -= len(m.Country)
+		copy(dAtA[i:], m.Country)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Country)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.OrganizationType) > 0 {
+		i -= len(m.OrganizationType)
+		copy(dAtA[i:], m.OrganizationType)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.OrganizationType)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
 		copy(dAtA[i:], m.Creator)
 		i = encodeVarintPacket(dAtA, i, uint64(len(m.Creator)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Mnemonic) > 0 {
-		i -= len(m.Mnemonic)
-		copy(dAtA[i:], m.Mnemonic)
-		i = encodeVarintPacket(dAtA, i, uint64(len(m.Mnemonic)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -430,6 +471,13 @@ func (m *IbcOrganizationPacketAck) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i -= len(m.Address)
 		copy(dAtA[i:], m.Address)
 		i = encodeVarintPacket(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.AccountName) > 0 {
+		i -= len(m.AccountName)
+		copy(dAtA[i:], m.AccountName)
+		i = encodeVarintPacket(dAtA, i, uint64(len(m.AccountName)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -498,11 +546,19 @@ func (m *IbcOrganizationPacketData) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Mnemonic)
+	l = len(m.Creator)
 	if l > 0 {
 		n += 1 + l + sovPacket(uint64(l))
 	}
-	l = len(m.Creator)
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	l = len(m.OrganizationType)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
+	l = len(m.Country)
 	if l > 0 {
 		n += 1 + l + sovPacket(uint64(l))
 	}
@@ -515,6 +571,10 @@ func (m *IbcOrganizationPacketAck) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.AccountName)
+	if l > 0 {
+		n += 1 + l + sovPacket(uint64(l))
+	}
 	l = len(m.Address)
 	if l > 0 {
 		n += 1 + l + sovPacket(uint64(l))
@@ -729,38 +789,6 @@ func (m *IbcOrganizationPacketData) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mnemonic", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPacket
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Mnemonic = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
 			}
 			var stringLen uint64
@@ -790,6 +818,102 @@ func (m *IbcOrganizationPacketData) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OrganizationType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OrganizationType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Country", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Country = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -842,6 +966,38 @@ func (m *IbcOrganizationPacketAck) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccountName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPacket
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPacket
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPacket
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccountName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 			}

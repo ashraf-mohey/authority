@@ -21,6 +21,9 @@ const (
 
 	// PortID is the default port id that module binds to
 	PortID = "organization"
+
+	OrganizationIdKey = "organization-id"
+	OrganizationKey   = "organization-record"
 )
 
 var (

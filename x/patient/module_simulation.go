@@ -24,7 +24,19 @@ var (
 )
 
 const (
-// this line is used by starport scaffolding # simapp/module/const
+	opWeightMsgAddPatient = "op_weight_msg_add_patient"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgAddPatient int = 100
+
+	opWeightMsgUpdatePatient = "op_weight_msg_update_patient"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgUpdatePatient int = 100
+
+	opWeightMsgDeletePatient = "op_weight_msg_delete_patient"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgDeletePatient int = 100
+
+	// this line is used by starport scaffolding # simapp/module/const
 )
 
 // GenerateGenesisState creates a randomized GenState of the module
@@ -57,6 +69,39 @@ func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
+
+	var weightMsgAddPatient int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgAddPatient, &weightMsgAddPatient, nil,
+		func(_ *rand.Rand) {
+			weightMsgAddPatient = defaultWeightMsgAddPatient
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgAddPatient,
+		patientsimulation.SimulateMsgAddPatient(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgUpdatePatient int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgUpdatePatient, &weightMsgUpdatePatient, nil,
+		func(_ *rand.Rand) {
+			weightMsgUpdatePatient = defaultWeightMsgUpdatePatient
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgUpdatePatient,
+		patientsimulation.SimulateMsgUpdatePatient(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgDeletePatient int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgDeletePatient, &weightMsgDeletePatient, nil,
+		func(_ *rand.Rand) {
+			weightMsgDeletePatient = defaultWeightMsgDeletePatient
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgDeletePatient,
+		patientsimulation.SimulateMsgDeletePatient(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
 
 	// this line is used by starport scaffolding # simapp/module/operation
 

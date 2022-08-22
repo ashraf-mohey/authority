@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "patient/params.proto";
+import "patient/patient.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/ashraf-mohey/authority/x/patient/types";
@@ -13,9 +14,29 @@ option go_package = "github.com/ashraf-mohey/authority/x/patient/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/ashrafmohey/authority/patient/params";
+    option (google.api.http).get = "/authority/patient/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a list of patients.
+	rpc GetPatients(QueryGetPatientsRequest) returns (QueryGetPatientsResponse) {
+		option (google.api.http).get = "/authority/patient/patients";
+	}
+
+// Queries a patient by id.
+	rpc GetPatientById(QueryGetPatientByIdRequest) returns (QueryGetPatientByIdResponse) {
+		option (google.api.http).get = "/authority/patient/patient/{patientId}";
+	}
+
+// Searches patients by name.
+	rpc SearchPatients(QuerySearchPatientsRequest) returns (QuerySearchPatientsResponse) {
+		option (google.api.http).get = "/authority/patient/patients/name/{nameQuery}";
+	}
+
+// Queries a list of patients by creator.
+	rpc GetPatientsByCreator(QueryGetPatientsByCreatorRequest) returns (QueryGetPatientsByCreatorResponse) {
+		option (google.api.http).get = "/authority/patient/patients/creator/{creator}";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +46,49 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPatientsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetPatientsResponse {
+  // Returning a list of patient's metadata records
+  repeated Patient patients = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPatientByIdRequest {
+  uint64 patientId = 1;
+}
+
+message QueryGetPatientByIdResponse {
+  Patient patient = 1;
+}
+
+message QuerySearchPatientsRequest {
+  string nameQuery = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QuerySearchPatientsResponse {
+  // Returning a list of patient's metadata records
+  repeated Patient patients = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetPatientsByCreatorRequest {
+  string creator = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGetPatientsByCreatorResponse {
+  // Returning a list of patient's metadata records
+  repeated Patient patients = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

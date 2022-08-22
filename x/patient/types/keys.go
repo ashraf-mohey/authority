@@ -15,6 +15,9 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_patient"
+
+	PatientIdKey = "patient-id"
+	PatientKey   = "patient-record"
 )
 
 func KeyPrefix(p string) []byte {

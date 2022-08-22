@@ -18,12 +18,15 @@ message NoData {
 
 // IbcOrganizationPacketData defines a struct for the packet payload
 message IbcOrganizationPacketData {
-  string mnemonic = 1;
-  string creator = 2; // < ---
+  string creator = 1;
+  string name = 2;
+  string organizationType = 3;
+  string country = 4;
 }
 
 // IbcOrganizationPacketAck defines a struct for the packet acknowledgment
 message IbcOrganizationPacketAck {
-	  string address = 1;
+  string accountName = 1;
+  string address = 2;
 }
 // this line is used by starport scaffolding # ibc/packet/proto/message

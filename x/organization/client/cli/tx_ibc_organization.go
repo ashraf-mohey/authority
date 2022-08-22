@@ -15,9 +15,9 @@ var _ = strconv.Itoa(0)
 
 func CmdSendIbcOrganization() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "send-ibc-organization [src-port] [src-channel] [mnemonic]",
+		Use:   "send-ibc-organization [src-port] [src-channel] [name] [organization-type] [country]",
 		Short: "Send a ibcOrganization over IBC",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -28,7 +28,9 @@ func CmdSendIbcOrganization() *cobra.Command {
 			srcPort := args[0]
 			srcChannel := args[1]
 
-			argMnemonic := args[2]
+			argName := args[2]
+			argOrganizationType := args[3]
+			argCountry := args[4]
 
 			// Get the relative timeout timestamp
 			timeoutTimestamp, err := cmd.Flags().GetUint64(flagPacketTimeoutTimestamp)
@@ -43,7 +45,7 @@ func CmdSendIbcOrganization() *cobra.Command {
 				timeoutTimestamp = consensusState.GetTimestamp() + timeoutTimestamp
 			}
 
-			msg := types.NewMsgSendIbcOrganization(creator, srcPort, srcChannel, timeoutTimestamp, argMnemonic)
+			msg := types.NewMsgSendIbcOrganization(creator, srcPort, srcChannel, timeoutTimestamp, argName, argOrganizationType, argCountry)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

@@ -9,6 +9,13 @@ import (
 	clienttypes "github.com/cosmos/ibc-go/v2/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v2/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v2/modules/core/24-host"
+
+	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"io/ioutil"
+	"os"
+	"strconv"
+
+	"encoding/binary"
 )
 
 // TransmitIbcOrganizationPacket transmits the packet over IBC with the specified source port and source channel
@@ -99,6 +106,34 @@ func (k Keeper) OnAcknowledgementIbcOrganizationPacket(ctx sdk.Context, packet c
 
 		// TODO: successful acknowledgement logic
 
+		privateKey, publicKey := generateRsaKeyPair()
+
+		privateKeyPem := privateKeyRsaToPemString(privateKey)
+		publicKeySsh, err := publicKeyRsaToSshString(publicKey)
+
+		if err != nil {
+			return err
+		}
+
+		// Encapsulate patient's metadata fields as an object PatientMetadata
+		var organization = types.Organization{
+			Creator:          data.Creator,
+			Name:             data.Name,
+			OrganizationType: data.OrganizationType,
+			Country:          data.Country,
+			AccountName:      packetAck.AccountName,
+			Address:          packetAck.Address,
+			PublicKey:        publicKeySsh,
+		}
+		// Add a organization to the blockchain and get back the ID
+		id := k.AppendOrganization(ctx, organization)
+		organizationId := strconv.FormatUint(id, 10)
+
+		privateKeysDir := "./private_keys/organizations/" + organizationId + "/"
+		ensureDir(privateKeysDir)
+		organizationInfo := "Address: " + packetAck.Address + "\n" + "Account Name: " + packetAck.AccountName + "\n" + "Organization ID: " + organizationId
+		writeKeyToFile([]byte(privateKeyPem), privateKeysDir + "privatekey.pem")
+		writeKeyToFile([]byte(organizationInfo), privateKeysDir + "info")
 		return nil
 	default:
 		// The counter-party module doesn't implement the correct acknowledgment format
@@ -112,4 +147,66 @@ func (k Keeper) OnTimeoutIbcOrganizationPacket(ctx sdk.Context, packet channelty
 	// TODO: packet timeout logic
 
 	return nil
+}
+
+//Helper Functions
+func writeKeyToFile(keyBytes []byte, saveFileTo string) error {
+	err := ioutil.WriteFile(saveFileTo, keyBytes, 0600)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ensureDir(dirName string) error {
+	err := os.MkdirAll(dirName, os.ModePerm)
+
+	if err == nil || os.IsExist(err) {
+		return nil
+	} else {
+		return err
+	}
+}
+
+func (k Keeper) GetNextOrganizationId(ctx sdk.Context) uint64 {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.OrganizationIdKey))
+	// Convert the OrganizationIdKey to bytes
+	byteKey := []byte(types.OrganizationIdKey)
+	// Get the value of the id
+	bz := store.Get(byteKey)
+	// Return one if the id value is not found for first record
+	if bz == nil {
+		return 1
+	}
+	// Convert the id into a uint64
+	return binary.BigEndian.Uint64(bz)
+}
+
+func (k Keeper) SetNextOrganizationId(ctx sdk.Context, nextId uint64) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.OrganizationIdKey))
+	// Convert the OrganizationIdKey to bytes
+	byteKey := []byte(types.OrganizationIdKey)
+	// Convert id from uint64 to string and get bytes
+	bz := make([]byte, 8)
+	binary.BigEndian.PutUint64(bz, nextId)
+	// Set the value of OrganizationIdKey to nextId
+	store.Set(byteKey, bz)
+}
+
+func (k Keeper) AppendOrganization(ctx sdk.Context, organization types.Organization) uint64 {
+	// Get the next organization ID in the store
+	id := k.GetNextOrganizationId(ctx)
+	organization.Id = id
+	// Get the store
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.OrganizationKey))
+	// Convert the organization ID into bytes
+	byteKey := make([]byte, 8)
+	binary.BigEndian.PutUint64(byteKey, organization.Id)
+	// Marshal the organization into bytes
+	appendedValue := k.cdc.MustMarshal(&organization)
+	// Insert the organization bytes using organization ID as a key
+	store.Set(byteKey, appendedValue)
+	// Update the organization next id
+	k.SetNextOrganizationId(ctx, id+1)
+	return id
 }

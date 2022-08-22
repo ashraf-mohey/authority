@@ -155,8 +155,8 @@ var (
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		monitoringp.AppModuleBasic{},
-		organizationmodule.AppModuleBasic{},
 		patientmodule.AppModuleBasic{},
+		organizationmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -228,10 +228,9 @@ type App struct {
 	ScopedTransferKeeper   capabilitykeeper.ScopedKeeper
 	ScopedMonitoringKeeper capabilitykeeper.ScopedKeeper
 
+	PatientKeeper            patientmodulekeeper.Keeper
 	ScopedOrganizationKeeper capabilitykeeper.ScopedKeeper
 	OrganizationKeeper       organizationmodulekeeper.Keeper
-
-	PatientKeeper patientmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -268,8 +267,8 @@ func New(
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey,
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey, monitoringptypes.StoreKey,
-		organizationmoduletypes.StoreKey,
 		patientmoduletypes.StoreKey,
+		organizationmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -383,6 +382,14 @@ func New(
 	)
 	monitoringModule := monitoringp.NewAppModule(appCodec, app.MonitoringKeeper)
 
+	app.PatientKeeper = *patientmodulekeeper.NewKeeper(
+		appCodec,
+		keys[patientmoduletypes.StoreKey],
+		keys[patientmoduletypes.MemStoreKey],
+		app.GetSubspace(patientmoduletypes.ModuleName),
+	)
+	patientModule := patientmodule.NewAppModule(appCodec, app.PatientKeeper, app.AccountKeeper, app.BankKeeper)
+
 	scopedOrganizationKeeper := app.CapabilityKeeper.ScopeToModule(organizationmoduletypes.ModuleName)
 	app.ScopedOrganizationKeeper = scopedOrganizationKeeper
 	app.OrganizationKeeper = *organizationmodulekeeper.NewKeeper(
@@ -395,14 +402,6 @@ func New(
 		scopedOrganizationKeeper,
 	)
 	organizationModule := organizationmodule.NewAppModule(appCodec, app.OrganizationKeeper, app.AccountKeeper, app.BankKeeper)
-
-	app.PatientKeeper = *patientmodulekeeper.NewKeeper(
-		appCodec,
-		keys[patientmoduletypes.StoreKey],
-		keys[patientmoduletypes.MemStoreKey],
-		app.GetSubspace(patientmoduletypes.ModuleName),
-	)
-	patientModule := patientmodule.NewAppModule(appCodec, app.PatientKeeper, app.AccountKeeper, app.BankKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -445,8 +444,8 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		monitoringModule,
-		organizationModule,
 		patientModule,
+		organizationModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -473,8 +472,8 @@ func New(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		monitoringptypes.ModuleName,
-		organizationmoduletypes.ModuleName,
 		patientmoduletypes.ModuleName,
+		organizationmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -497,8 +496,8 @@ func New(
 		ibchost.ModuleName,
 		ibctransfertypes.ModuleName,
 		monitoringptypes.ModuleName,
-		organizationmoduletypes.ModuleName,
 		patientmoduletypes.ModuleName,
+		organizationmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -526,8 +525,8 @@ func New(
 		ibctransfertypes.ModuleName,
 		feegrant.ModuleName,
 		monitoringptypes.ModuleName,
-		organizationmoduletypes.ModuleName,
 		patientmoduletypes.ModuleName,
+		organizationmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
@@ -551,8 +550,8 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		transferModule,
 		monitoringModule,
-		organizationModule,
 		patientModule,
+		organizationModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 	app.sm.RegisterStoreDecoders()
@@ -742,8 +741,8 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(monitoringptypes.ModuleName)
-	paramsKeeper.Subspace(organizationmoduletypes.ModuleName)
 	paramsKeeper.Subspace(patientmoduletypes.ModuleName)
+	paramsKeeper.Subspace(organizationmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

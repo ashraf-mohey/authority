@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "organization/params.proto";
+import "organization/organization.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
@@ -13,9 +14,34 @@ option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/ashrafmohey/authority/organization/params";
+    option (google.api.http).get = "/authority/organization/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a list of organizations.
+	rpc GetOrganizations(QueryGetOrganizationsRequest) returns (QueryGetOrganizationsResponse) {
+		option (google.api.http).get = "/authority/organization/organizations";
+	}
+
+// Queries an organization by id.
+	rpc GetOrganizationById(QueryGetOrganizationByIdRequest) returns (QueryGetOrganizationByIdResponse) {
+		option (google.api.http).get = "/authority/organization/organization/{organizationId}";
+	}
+
+// Queries a list of organizations by creator.
+	rpc GetOrganizationsByCreator(QueryGetOrganizationsByCreatorRequest) returns (QueryGetOrganizationsByCreatorResponse) {
+		option (google.api.http).get = "/authority/organization/organizations/creator/{creator}";
+	}
+
+// Searches organizations by name.
+	rpc SearchOrganizations(QuerySearchOrganizationsRequest) returns (QuerySearchOrganizationsResponse) {
+		option (google.api.http).get = "/authority/organization/organizations/name/{nameQuery}";
+	}
+
+// Queries a list of GetOrganizationsByAddress items.
+	rpc GetOrganizationsByAddress(QueryGetOrganizationsByAddressRequest) returns (QueryGetOrganizationsByAddressResponse) {
+		option (google.api.http).get = "/authority/organization/organization/address/{address}";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +51,58 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetOrganizationsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetOrganizationsResponse {
+  // Returning a list of organizations
+  repeated Organization organizations = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOrganizationByIdRequest {
+  uint64 organizationId = 1;
+}
+
+message QueryGetOrganizationByIdResponse {
+  Organization organization = 1;
+}
+
+message QueryGetOrganizationsByCreatorRequest {
+  string creator = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGetOrganizationsByCreatorResponse {
+  // Returning a list of organizations records
+  repeated Organization organizations = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QuerySearchOrganizationsRequest {
+  string nameQuery = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QuerySearchOrganizationsResponse {
+  // Returning a list of organizations records
+  repeated Organization organizations = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetOrganizationsByAddressRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryGetOrganizationsByAddressResponse {
+  Organization organization = 1;
 }
 
 // this line is used by starport scaffolding # 3

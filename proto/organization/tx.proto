@@ -1,6 +1,7 @@
 syntax = "proto3";
 package ashrafmohey.authority.organization;
 
+import "organization/organization.proto";
 // this line is used by starport scaffolding # proto/tx/import
 
 option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
@@ -8,6 +9,7 @@ option go_package = "github.com/ashraf-mohey/authority/x/organization/types";
 // Msg defines the Msg service.
 service Msg {
       rpc SendIbcOrganization(MsgSendIbcOrganization) returns (MsgSendIbcOrganizationResponse);
+  rpc UpdateOrganization(MsgUpdateOrganization) returns (MsgUpdateOrganizationResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -16,9 +18,27 @@ message MsgSendIbcOrganization {
   string port = 2;
   string channelID = 3;
   uint64 timeoutTimestamp = 4;
-  string mnemonic = 5;
+  string name = 5;
+  string organizationType = 6;
+  string country = 7;
 }
 
 message MsgSendIbcOrganizationResponse {
+  Organization organization = 1;
 }
+message MsgUpdateOrganization {
+  string creator = 1;
+  uint64 organizationId = 2;
+  string name = 3;
+  string OrganizationType = 4;
+  string country = 5;
+  string accountName = 6;
+  string address = 7;
+  string publicKey = 8;
+}
+
+message MsgUpdateOrganizationResponse {
+  Organization organization = 1;
+}
+
 // this line is used by starport scaffolding # proto/tx/message

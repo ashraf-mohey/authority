@@ -14,14 +14,18 @@ func NewMsgSendIbcOrganization(
 	port string,
 	channelID string,
 	timeoutTimestamp uint64,
-	mnemonic string,
+	name string,
+	organizationType string,
+	country string,
 ) *MsgSendIbcOrganization {
 	return &MsgSendIbcOrganization{
 		Creator:          creator,
 		Port:             port,
 		ChannelID:        channelID,
 		TimeoutTimestamp: timeoutTimestamp,
-		Mnemonic:         mnemonic,
+		Name:             name,
+		OrganizationType: organizationType,
+		Country:          country,
 	}
 }
 

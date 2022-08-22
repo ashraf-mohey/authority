@@ -9,7 +9,11 @@ import (
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
+	io "io"
 	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -23,19 +27,484 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type MsgAddPatient struct {
+	Creator          string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Name             string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	BirthDate        string `protobuf:"bytes,3,opt,name=birthDate,proto3" json:"birthDate,omitempty"`
+	Gender           string `protobuf:"bytes,4,opt,name=gender,proto3" json:"gender,omitempty"`
+	MaritalStatus    string `protobuf:"bytes,5,opt,name=maritalStatus,proto3" json:"maritalStatus,omitempty"`
+	Phone            string `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
+	Email            string `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
+	Nationality      string `protobuf:"bytes,8,opt,name=nationality,proto3" json:"nationality,omitempty"`
+	Address          string `protobuf:"bytes,9,opt,name=address,proto3" json:"address,omitempty"`
+	EmergencyContact string `protobuf:"bytes,10,opt,name=emergencyContact,proto3" json:"emergencyContact,omitempty"`
+}
+
+func (m *MsgAddPatient) Reset()         { *m = MsgAddPatient{} }
+func (m *MsgAddPatient) String() string { return proto.CompactTextString(m) }
+func (*MsgAddPatient) ProtoMessage()    {}
+func (*MsgAddPatient) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b6710c54328fb2c2, []int{0}
+}
+func (m *MsgAddPatient) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAddPatient) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAddPatient.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAddPatient) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAddPatient.Merge(m, src)
+}
+func (m *MsgAddPatient) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAddPatient) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAddPatient.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAddPatient proto.InternalMessageInfo
+
+func (m *MsgAddPatient) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetBirthDate() string {
+	if m != nil {
+		return m.BirthDate
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetGender() string {
+	if m != nil {
+		return m.Gender
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetMaritalStatus() string {
+	if m != nil {
+		return m.MaritalStatus
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetPhone() string {
+	if m != nil {
+		return m.Phone
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetEmail() string {
+	if m != nil {
+		return m.Email
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetNationality() string {
+	if m != nil {
+		return m.Nationality
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *MsgAddPatient) GetEmergencyContact() string {
+	if m != nil {
+		return m.EmergencyContact
+	}
+	return ""
+}
+
+type MsgAddPatientResponse struct {
+	Patient *Patient `protobuf:"bytes,1,opt,name=patient,proto3" json:"patient,omitempty"`
+}
+
+func (m *MsgAddPatientResponse) Reset()         { *m = MsgAddPatientResponse{} }
+func (m *MsgAddPatientResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAddPatientResponse) ProtoMessage()    {}
+func (*MsgAddPatientResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b6710c54328fb2c2, []int{1}
+}
+func (m *MsgAddPatientResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAddPatientResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAddPatientResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAddPatientResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAddPatientResponse.Merge(m, src)
+}
+func (m *MsgAddPatientResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAddPatientResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAddPatientResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAddPatientResponse proto.InternalMessageInfo
+
+func (m *MsgAddPatientResponse) GetPatient() *Patient {
+	if m != nil {
+		return m.Patient
+	}
+	return nil
+}
+
+type MsgUpdatePatient struct {
+	Creator          string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	PatientId        uint64 `protobuf:"varint,2,opt,name=patientId,proto3" json:"patientId,omitempty"`
+	Name             string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	BirthDate        string `protobuf:"bytes,4,opt,name=birthDate,proto3" json:"birthDate,omitempty"`
+	Gender           string `protobuf:"bytes,5,opt,name=gender,proto3" json:"gender,omitempty"`
+	MaritalStatus    string `protobuf:"bytes,6,opt,name=maritalStatus,proto3" json:"maritalStatus,omitempty"`
+	Phone            string `protobuf:"bytes,7,opt,name=phone,proto3" json:"phone,omitempty"`
+	Email            string `protobuf:"bytes,8,opt,name=email,proto3" json:"email,omitempty"`
+	Nationality      string `protobuf:"bytes,9,opt,name=nationality,proto3" json:"nationality,omitempty"`
+	Address          string `protobuf:"bytes,10,opt,name=address,proto3" json:"address,omitempty"`
+	EmergencyContact string `protobuf:"bytes,11,opt,name=emergencyContact,proto3" json:"emergencyContact,omitempty"`
+	PublicKey        string `protobuf:"bytes,12,opt,name=publicKey,proto3" json:"publicKey,omitempty"`
+}
+
+func (m *MsgUpdatePatient) Reset()         { *m = MsgUpdatePatient{} }
+func (m *MsgUpdatePatient) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdatePatient) ProtoMessage()    {}
+func (*MsgUpdatePatient) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b6710c54328fb2c2, []int{2}
+}
+func (m *MsgUpdatePatient) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdatePatient) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdatePatient.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdatePatient) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdatePatient.Merge(m, src)
+}
+func (m *MsgUpdatePatient) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdatePatient) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdatePatient.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdatePatient proto.InternalMessageInfo
+
+func (m *MsgUpdatePatient) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetPatientId() uint64 {
+	if m != nil {
+		return m.PatientId
+	}
+	return 0
+}
+
+func (m *MsgUpdatePatient) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetBirthDate() string {
+	if m != nil {
+		return m.BirthDate
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetGender() string {
+	if m != nil {
+		return m.Gender
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetMaritalStatus() string {
+	if m != nil {
+		return m.MaritalStatus
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetPhone() string {
+	if m != nil {
+		return m.Phone
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetEmail() string {
+	if m != nil {
+		return m.Email
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetNationality() string {
+	if m != nil {
+		return m.Nationality
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetAddress() string {
+	if m != nil {
+		return m.Address
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetEmergencyContact() string {
+	if m != nil {
+		return m.EmergencyContact
+	}
+	return ""
+}
+
+func (m *MsgUpdatePatient) GetPublicKey() string {
+	if m != nil {
+		return m.PublicKey
+	}
+	return ""
+}
+
+type MsgUpdatePatientResponse struct {
+	Patient *Patient `protobuf:"bytes,1,opt,name=patient,proto3" json:"patient,omitempty"`
+}
+
+func (m *MsgUpdatePatientResponse) Reset()         { *m = MsgUpdatePatientResponse{} }
+func (m *MsgUpdatePatientResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdatePatientResponse) ProtoMessage()    {}
+func (*MsgUpdatePatientResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b6710c54328fb2c2, []int{3}
+}
+func (m *MsgUpdatePatientResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdatePatientResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdatePatientResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdatePatientResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdatePatientResponse.Merge(m, src)
+}
+func (m *MsgUpdatePatientResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdatePatientResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdatePatientResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdatePatientResponse proto.InternalMessageInfo
+
+func (m *MsgUpdatePatientResponse) GetPatient() *Patient {
+	if m != nil {
+		return m.Patient
+	}
+	return nil
+}
+
+type MsgDeletePatient struct {
+	Creator   string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	PatientId uint64 `protobuf:"varint,2,opt,name=patientId,proto3" json:"patientId,omitempty"`
+}
+
+func (m *MsgDeletePatient) Reset()         { *m = MsgDeletePatient{} }
+func (m *MsgDeletePatient) String() string { return proto.CompactTextString(m) }
+func (*MsgDeletePatient) ProtoMessage()    {}
+func (*MsgDeletePatient) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b6710c54328fb2c2, []int{4}
+}
+func (m *MsgDeletePatient) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeletePatient) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeletePatient.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeletePatient) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeletePatient.Merge(m, src)
+}
+func (m *MsgDeletePatient) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeletePatient) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeletePatient.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeletePatient proto.InternalMessageInfo
+
+func (m *MsgDeletePatient) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgDeletePatient) GetPatientId() uint64 {
+	if m != nil {
+		return m.PatientId
+	}
+	return 0
+}
+
+type MsgDeletePatientResponse struct {
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *MsgDeletePatientResponse) Reset()         { *m = MsgDeletePatientResponse{} }
+func (m *MsgDeletePatientResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgDeletePatientResponse) ProtoMessage()    {}
+func (*MsgDeletePatientResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b6710c54328fb2c2, []int{5}
+}
+func (m *MsgDeletePatientResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeletePatientResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeletePatientResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeletePatientResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeletePatientResponse.Merge(m, src)
+}
+func (m *MsgDeletePatientResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeletePatientResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeletePatientResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeletePatientResponse proto.InternalMessageInfo
+
+func (m *MsgDeletePatientResponse) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func init() {
+	proto.RegisterType((*MsgAddPatient)(nil), "ashrafmohey.authority.patient.MsgAddPatient")
+	proto.RegisterType((*MsgAddPatientResponse)(nil), "ashrafmohey.authority.patient.MsgAddPatientResponse")
+	proto.RegisterType((*MsgUpdatePatient)(nil), "ashrafmohey.authority.patient.MsgUpdatePatient")
+	proto.RegisterType((*MsgUpdatePatientResponse)(nil), "ashrafmohey.authority.patient.MsgUpdatePatientResponse")
+	proto.RegisterType((*MsgDeletePatient)(nil), "ashrafmohey.authority.patient.MsgDeletePatient")
+	proto.RegisterType((*MsgDeletePatientResponse)(nil), "ashrafmohey.authority.patient.MsgDeletePatientResponse")
+}
+
 func init() { proto.RegisterFile("patient/tx.proto", fileDescriptor_b6710c54328fb2c2) }
 
 var fileDescriptor_b6710c54328fb2c2 = []byte{
-	// 138 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x28, 0x48, 0x2c, 0xc9,
-	0x4c, 0xcd, 0x2b, 0xd1, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92, 0x4d, 0x2c,
-	0xce, 0x28, 0x4a, 0x4c, 0xcb, 0xcd, 0xcf, 0x48, 0xad, 0xd4, 0x4b, 0x2c, 0x2d, 0xc9, 0xc8, 0x2f,
-	0xca, 0x2c, 0xa9, 0xd4, 0x83, 0xaa, 0x33, 0x62, 0xe5, 0x62, 0xf6, 0x2d, 0x4e, 0x77, 0xf2, 0x3e,
-	0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63,
-	0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6, 0x63, 0x39, 0x86, 0x28, 0xc3, 0xf4, 0xcc, 0x92, 0x8c, 0xd2,
-	0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0x7d, 0x88, 0x51, 0xba, 0x60, 0xb3, 0xf4, 0xe1, 0x66, 0xe9, 0x57,
-	0xe8, 0xc3, 0x6d, 0xad, 0x2c, 0x48, 0x2d, 0x4e, 0x62, 0x03, 0xdb, 0x6c, 0x0c, 0x08, 0x00, 0x00,
-	0xff, 0xff, 0xe3, 0x0c, 0x3c, 0x3d, 0x8d, 0x00, 0x00, 0x00,
+	// 523 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x94, 0xcf, 0x6e, 0xd3, 0x4e,
+	0x10, 0xc7, 0x13, 0xe7, 0x5f, 0x33, 0xf9, 0xe5, 0xa7, 0x68, 0x45, 0xd1, 0x2a, 0x2a, 0x56, 0x15,
+	0x21, 0x84, 0x2a, 0xb0, 0x45, 0x41, 0xe2, 0xca, 0x9f, 0x5e, 0xa0, 0x8a, 0x84, 0x82, 0x38, 0x80,
+	0xb8, 0x6c, 0xec, 0xc1, 0x5e, 0xc9, 0xf6, 0x5a, 0xbb, 0x1b, 0xa9, 0x7e, 0x0b, 0x5e, 0x84, 0xf7,
+	0xe0, 0xd8, 0x23, 0x47, 0x94, 0x5c, 0xe1, 0x1d, 0x50, 0xd7, 0x8e, 0x1b, 0x43, 0xea, 0xb4, 0x82,
+	0x53, 0x32, 0xdf, 0xd9, 0x99, 0x9d, 0xfd, 0x7e, 0xd6, 0x0b, 0xa3, 0x94, 0x69, 0x8e, 0x89, 0x76,
+	0xf5, 0x99, 0x93, 0x4a, 0xa1, 0x05, 0xb9, 0xc3, 0x54, 0x28, 0xd9, 0xa7, 0x58, 0x84, 0x98, 0x39,
+	0x6c, 0xa1, 0x43, 0x21, 0xb9, 0xce, 0x9c, 0x62, 0xdd, 0x78, 0x7f, 0x5d, 0x50, 0xfc, 0xe6, 0x55,
+	0x93, 0x2f, 0x16, 0x0c, 0xa7, 0x2a, 0x78, 0xee, 0xfb, 0x6f, 0x72, 0x9d, 0x50, 0xe8, 0x79, 0x12,
+	0x99, 0x16, 0x92, 0x36, 0x0f, 0x9b, 0xf7, 0xfb, 0xb3, 0x75, 0x48, 0x08, 0xb4, 0x13, 0x16, 0x23,
+	0xb5, 0x8c, 0x6c, 0xfe, 0x93, 0x03, 0xe8, 0xcf, 0xb9, 0xd4, 0xe1, 0x09, 0xd3, 0x48, 0x5b, 0x26,
+	0x71, 0x29, 0x90, 0xdb, 0xd0, 0x0d, 0x30, 0xf1, 0x51, 0xd2, 0xb6, 0x49, 0x15, 0x11, 0xb9, 0x0b,
+	0xc3, 0x98, 0x49, 0xae, 0x59, 0xf4, 0x56, 0x33, 0xbd, 0x50, 0xb4, 0x63, 0xd2, 0x55, 0x91, 0xdc,
+	0x82, 0x4e, 0x1a, 0x8a, 0x04, 0x69, 0xd7, 0x64, 0xf3, 0xe0, 0x42, 0xc5, 0x98, 0xf1, 0x88, 0xf6,
+	0x72, 0xd5, 0x04, 0xe4, 0x10, 0x06, 0x09, 0xd3, 0x5c, 0x24, 0x2c, 0xe2, 0x3a, 0xa3, 0x7b, 0x26,
+	0xb7, 0x29, 0x5d, 0x9c, 0x8b, 0xf9, 0xbe, 0x44, 0xa5, 0x68, 0x3f, 0x3f, 0x57, 0x11, 0x92, 0x23,
+	0x18, 0x61, 0x8c, 0x32, 0xc0, 0xc4, 0xcb, 0x5e, 0x8a, 0x44, 0x33, 0x4f, 0x53, 0x30, 0x4b, 0xfe,
+	0xd0, 0x27, 0xef, 0x61, 0xbf, 0x62, 0xd7, 0x0c, 0x55, 0x2a, 0x12, 0x85, 0xe4, 0x19, 0xf4, 0x0a,
+	0x67, 0x8d, 0x6d, 0x83, 0xe3, 0x7b, 0x4e, 0x2d, 0x10, 0x67, 0xdd, 0x60, 0x5d, 0x36, 0xf9, 0x61,
+	0xc1, 0x68, 0xaa, 0x82, 0x77, 0xa9, 0xcf, 0x34, 0xee, 0xa6, 0x71, 0x00, 0xfd, 0xa2, 0xf2, 0x95,
+	0x6f, 0x90, 0xb4, 0x67, 0x97, 0x42, 0xc9, 0xaa, 0x75, 0x15, 0xab, 0xf6, 0xd5, 0xac, 0x3a, 0xf5,
+	0xac, 0xba, 0xb5, 0xac, 0x7a, 0x5b, 0x59, 0xed, 0xd5, 0xb0, 0xea, 0xd7, 0xb2, 0x82, 0xdd, 0xac,
+	0x06, 0xdb, 0x59, 0x19, 0x87, 0x16, 0xf3, 0x88, 0x7b, 0xa7, 0x98, 0xd1, 0xff, 0xf2, 0xf3, 0x96,
+	0xc2, 0xe4, 0x23, 0xd0, 0xdf, 0xdd, 0xfe, 0x87, 0x30, 0x5f, 0x1b, 0x96, 0x27, 0x18, 0xe1, 0x5f,
+	0xb3, 0x9c, 0x1c, 0x99, 0x49, 0x2b, 0xbd, 0xca, 0x49, 0xff, 0x07, 0x8b, 0xfb, 0xa6, 0x5d, 0x7b,
+	0x66, 0x71, 0xff, 0xf8, 0xa7, 0x05, 0xad, 0xa9, 0x0a, 0x48, 0x0a, 0xb0, 0xf1, 0x4d, 0x3f, 0xd8,
+	0x31, 0x7e, 0xe5, 0x4a, 0x8f, 0x9f, 0xdc, 0x64, 0x75, 0x39, 0x49, 0x06, 0xc3, 0xea, 0xd5, 0x75,
+	0x77, 0xb7, 0xa9, 0x14, 0x8c, 0x9f, 0xde, 0xb0, 0x60, 0x73, 0xeb, 0xaa, 0xd3, 0xd7, 0xd8, 0xba,
+	0x52, 0x70, 0x9d, 0xad, 0xb7, 0xfa, 0xff, 0xe2, 0xf4, 0xeb, 0xd2, 0x6e, 0x9e, 0x2f, 0xed, 0xe6,
+	0xf7, 0xa5, 0xdd, 0xfc, 0xbc, 0xb2, 0x1b, 0xe7, 0x2b, 0xbb, 0xf1, 0x6d, 0x65, 0x37, 0x3e, 0x3c,
+	0x0a, 0xb8, 0x0e, 0x17, 0x73, 0xc7, 0x13, 0xb1, 0x9b, 0x37, 0x7f, 0x68, 0xba, 0xbb, 0x65, 0x77,
+	0xf7, 0xcc, 0x2d, 0x5f, 0xf1, 0x2c, 0x45, 0x35, 0xef, 0x9a, 0x37, 0xf9, 0xf1, 0xaf, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x36, 0x74, 0x2a, 0xa1, 0xdd, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -50,6 +519,9 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
+	AddPatient(ctx context.Context, in *MsgAddPatient, opts ...grpc.CallOption) (*MsgAddPatientResponse, error)
+	UpdatePatient(ctx context.Context, in *MsgUpdatePatient, opts ...grpc.CallOption) (*MsgUpdatePatientResponse, error)
+	DeletePatient(ctx context.Context, in *MsgDeletePatient, opts ...grpc.CallOption) (*MsgDeletePatientResponse, error)
 }
 
 type msgClient struct {
@@ -60,22 +532,1854 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
+func (c *msgClient) AddPatient(ctx context.Context, in *MsgAddPatient, opts ...grpc.CallOption) (*MsgAddPatientResponse, error) {
+	out := new(MsgAddPatientResponse)
+	err := c.cc.Invoke(ctx, "/ashrafmohey.authority.patient.Msg/AddPatient", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdatePatient(ctx context.Context, in *MsgUpdatePatient, opts ...grpc.CallOption) (*MsgUpdatePatientResponse, error) {
+	out := new(MsgUpdatePatientResponse)
+	err := c.cc.Invoke(ctx, "/ashrafmohey.authority.patient.Msg/UpdatePatient", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeletePatient(ctx context.Context, in *MsgDeletePatient, opts ...grpc.CallOption) (*MsgDeletePatientResponse, error) {
+	out := new(MsgDeletePatientResponse)
+	err := c.cc.Invoke(ctx, "/ashrafmohey.authority.patient.Msg/DeletePatient", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
+	AddPatient(context.Context, *MsgAddPatient) (*MsgAddPatientResponse, error)
+	UpdatePatient(context.Context, *MsgUpdatePatient) (*MsgUpdatePatientResponse, error)
+	DeletePatient(context.Context, *MsgDeletePatient) (*MsgDeletePatientResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
 type UnimplementedMsgServer struct {
 }
 
+func (*UnimplementedMsgServer) AddPatient(ctx context.Context, req *MsgAddPatient) (*MsgAddPatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPatient not implemented")
+}
+func (*UnimplementedMsgServer) UpdatePatient(ctx context.Context, req *MsgUpdatePatient) (*MsgUpdatePatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePatient not implemented")
+}
+func (*UnimplementedMsgServer) DeletePatient(ctx context.Context, req *MsgDeletePatient) (*MsgDeletePatientResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePatient not implemented")
+}
+
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
+}
+
+func _Msg_AddPatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAddPatient)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AddPatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ashrafmohey.authority.patient.Msg/AddPatient",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AddPatient(ctx, req.(*MsgAddPatient))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdatePatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdatePatient)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdatePatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ashrafmohey.authority.patient.Msg/UpdatePatient",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdatePatient(ctx, req.(*MsgUpdatePatient))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeletePatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeletePatient)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeletePatient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ashrafmohey.authority.patient.Msg/DeletePatient",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeletePatient(ctx, req.(*MsgDeletePatient))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ashrafmohey.authority.patient.Msg",
 	HandlerType: (*MsgServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "patient/tx.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddPatient",
+			Handler:    _Msg_AddPatient_Handler,
+		},
+		{
+			MethodName: "UpdatePatient",
+			Handler:    _Msg_UpdatePatient_Handler,
+		},
+		{
+			MethodName: "DeletePatient",
+			Handler:    _Msg_DeletePatient_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "patient/tx.proto",
 }
+
+func (m *MsgAddPatient) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAddPatient) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAddPatient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.EmergencyContact) > 0 {
+		i -= len(m.EmergencyContact)
+		copy(dAtA[i:], m.EmergencyContact)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.EmergencyContact)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.Nationality) > 0 {
+		i -= len(m.Nationality)
+		copy(dAtA[i:], m.Nationality)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Nationality)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.Email) > 0 {
+		i -= len(m.Email)
+		copy(dAtA[i:], m.Email)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Email)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Phone) > 0 {
+		i -= len(m.Phone)
+		copy(dAtA[i:], m.Phone)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Phone)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.MaritalStatus) > 0 {
+		i -= len(m.MaritalStatus)
+		copy(dAtA[i:], m.MaritalStatus)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.MaritalStatus)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Gender) > 0 {
+		i -= len(m.Gender)
+		copy(dAtA[i:], m.Gender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Gender)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.BirthDate) > 0 {
+		i -= len(m.BirthDate)
+		copy(dAtA[i:], m.BirthDate)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.BirthDate)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAddPatientResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAddPatientResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAddPatientResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Patient != nil {
+		{
+			size, err := m.Patient.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTx(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdatePatient) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdatePatient) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdatePatient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PublicKey) > 0 {
+		i -= len(m.PublicKey)
+		copy(dAtA[i:], m.PublicKey)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.PublicKey)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.EmergencyContact) > 0 {
+		i -= len(m.EmergencyContact)
+		copy(dAtA[i:], m.EmergencyContact)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.EmergencyContact)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Address)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Nationality) > 0 {
+		i -= len(m.Nationality)
+		copy(dAtA[i:], m.Nationality)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Nationality)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.Email) > 0 {
+		i -= len(m.Email)
+		copy(dAtA[i:], m.Email)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Email)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.Phone) > 0 {
+		i -= len(m.Phone)
+		copy(dAtA[i:], m.Phone)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Phone)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.MaritalStatus) > 0 {
+		i -= len(m.MaritalStatus)
+		copy(dAtA[i:], m.MaritalStatus)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.MaritalStatus)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Gender) > 0 {
+		i -= len(m.Gender)
+		copy(dAtA[i:], m.Gender)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Gender)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.BirthDate) > 0 {
+		i -= len(m.BirthDate)
+		copy(dAtA[i:], m.BirthDate)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.BirthDate)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.PatientId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.PatientId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdatePatientResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdatePatientResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdatePatientResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Patient != nil {
+		{
+			size, err := m.Patient.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTx(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeletePatient) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeletePatient) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeletePatient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PatientId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.PatientId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeletePatientResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeletePatientResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeletePatientResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
+	offset -= sovTx(v)
+	base := offset
+	for v >= 1<<7 {
+		dAtA[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	dAtA[offset] = uint8(v)
+	return base
+}
+func (m *MsgAddPatient) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.BirthDate)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Gender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.MaritalStatus)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Phone)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Email)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Nationality)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.EmergencyContact)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgAddPatientResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Patient != nil {
+		l = m.Patient.Size()
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgUpdatePatient) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.PatientId != 0 {
+		n += 1 + sovTx(uint64(m.PatientId))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.BirthDate)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Gender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.MaritalStatus)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Phone)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Email)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Nationality)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Address)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.EmergencyContact)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.PublicKey)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgUpdatePatientResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Patient != nil {
+		l = m.Patient.Size()
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgDeletePatient) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.PatientId != 0 {
+		n += 1 + sovTx(uint64(m.PatientId))
+	}
+	return n
+}
+
+func (m *MsgDeletePatientResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	return n
+}
+
+func sovTx(x uint64) (n int) {
+	return (math_bits.Len64(x|1) + 6) / 7
+}
+func sozTx(x uint64) (n int) {
+	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *MsgAddPatient) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAddPatient: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAddPatient: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BirthDate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BirthDate = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Gender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Gender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaritalStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MaritalStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Phone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Phone = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Email = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nationality", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Nationality = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EmergencyContact", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EmergencyContact = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAddPatientResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAddPatientResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAddPatientResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Patient", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Patient == nil {
+				m.Patient = &Patient{}
+			}
+			if err := m.Patient.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdatePatient) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdatePatient: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdatePatient: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PatientId", wireType)
+			}
+			m.PatientId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PatientId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BirthDate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BirthDate = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Gender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Gender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaritalStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MaritalStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Phone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Phone = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Email = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nationality", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Nationality = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Address = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EmergencyContact", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EmergencyContact = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PublicKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdatePatientResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdatePatientResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdatePatientResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Patient", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Patient == nil {
+				m.Patient = &Patient{}
+			}
+			if err := m.Patient.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeletePatient) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeletePatient: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeletePatient: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PatientId", wireType)
+			}
+			m.PatientId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PatientId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeletePatientResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeletePatientResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeletePatientResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipTx(dAtA []byte) (n int, err error) {
+	l := len(dAtA)
+	iNdEx := 0
+	depth := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if dAtA[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+		case 1:
+			iNdEx += 8
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if length < 0 {
+				return 0, ErrInvalidLengthTx
+			}
+			iNdEx += length
+		case 3:
+			depth++
+		case 4:
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupTx
+			}
+			depth--
+		case 5:
+			iNdEx += 4
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthTx
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
+	}
+	return 0, io.ErrUnexpectedEOF
+}
+
+var (
+	ErrInvalidLengthTx        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowTx          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupTx = fmt.Errorf("proto: unexpected end of group")
+)

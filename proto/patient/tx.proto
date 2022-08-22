@@ -1,13 +1,62 @@
 syntax = "proto3";
 package ashrafmohey.authority.patient;
 
+import "patient/patient.proto";
 // this line is used by starport scaffolding # proto/tx/import
 
 option go_package = "github.com/ashraf-mohey/authority/x/patient/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc AddPatient(MsgAddPatient) returns (MsgAddPatientResponse);
+  rpc UpdatePatient(MsgUpdatePatient) returns (MsgUpdatePatientResponse);
+  rpc DeletePatient(MsgDeletePatient) returns (MsgDeletePatientResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgAddPatient {
+  string creator = 1;
+  string name = 2;
+  string birthDate = 3;
+  string gender = 4;
+  string maritalStatus = 5;
+  string phone = 6;
+  string email = 7;
+  string nationality = 8;
+  string address = 9;
+  string emergencyContact = 10;
+}
+
+message MsgAddPatientResponse {
+  Patient patient = 1;
+}
+
+message MsgUpdatePatient {
+  string creator = 1;
+  uint64 patientId = 2;
+  string name = 3;
+  string birthDate = 4;
+  string gender = 5;
+  string maritalStatus = 6;
+  string phone = 7;
+  string email = 8;
+  string nationality = 9;
+  string address = 10;
+  string emergencyContact = 11;
+  string publicKey = 12;
+}
+
+message MsgUpdatePatientResponse {
+  Patient patient = 1;
+}
+
+message MsgDeletePatient {
+  string creator = 1;
+  uint64 patientId = 2;
+}
+
+message MsgDeletePatientResponse {
+  uint64 id = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message
